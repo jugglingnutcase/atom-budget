@@ -1,3 +1,5 @@
+build/atom-shell
+
 # Logs
 logs
 *.log
