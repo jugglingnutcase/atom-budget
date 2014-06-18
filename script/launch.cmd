@@ -1,1 +1,1 @@
-..\..\atom-shell\atom.exe .
+.\build\atom-shell\atom.exe .\budget
