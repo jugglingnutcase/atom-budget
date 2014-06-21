@@ -11,5 +11,8 @@
     "budget"
   ],
   "author": "James R. Sconfitto",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^2.1.1"
+  }
 }
