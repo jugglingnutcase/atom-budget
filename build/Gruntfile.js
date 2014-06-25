@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     'download-atom-shell': {
-      version: '0.13.2',
+      version: '0.13.3',
       outputDir: 'atom-shell',
       downloadDir: atomShellDownloadDir,
       rebuild: true
