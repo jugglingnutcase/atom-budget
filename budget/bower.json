@@ -1,0 +1,25 @@
+{
+  "name": "atom-budget",
+  "main": "index.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jugglingnutcase/atom-budget",
+  "authors": [
+    "James R Sconfitto <jugglingnutcase@gmail.com>"
+  ],
+  "description": "A budget app built using atom-shell",
+  "keywords": [
+    "budget"
+  ],
+  "license": "ISC",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pure": "~0.5.0"
+  }
+}
