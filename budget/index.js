@@ -2,11 +2,19 @@ var $ = require('jquery');
 var leveljs = require('level-js');
 var db = leveljs('budget');
 
+function get (attr) {
+  return function (object) { return object[attr]; }
+}
+
 function addAccount() {
   var accounts = getAccountsFromUI();
-  var newAccount = { name: $('#accountName').val() }
-  accounts.push(newAccount);
-  storeAccounts(accounts);
+  var newAccountName = $('#accountName').val();
+  var newAccount = { name: newAccountName }
+  var accountNames = accounts.map(get('name'));
+  if(accountNames.indexOf(newAccountName) == -1) {
+    accounts.push(newAccount);
+    storeAccounts(accounts);
+  }
 }
 
 function getAccountsFromUI() {
@@ -21,9 +29,24 @@ function getAccountsFromUI() {
 // Build up and insert the HTML
 function fillAccounts(accounts) {
   var accountsHTML = accounts.map(function (account) {
-    return '<li class="account" data-name="' + account.name + '">' + account.name + '</li>'
+    return '<li class="account" data-name="' + account.name + '">' + account.name +
+      '  <a href="#">Remove</a></li>'
   })
   $('.accounts').html(accountsHTML)
+  $('.accounts a').on('click', removeAccount)
+}
+
+function removeAccount(ev) {
+  var accountName = $(this).parent().data('name')
+  console.warn('Removing account: ' + accountName)
+  $(this).parent().remove()
+  
+  var accounts = getAccountsFromUI();
+  accounts = accounts.filter(function(account) {
+    return account.name !== accountName
+  })
+  
+  storeAccounts(accounts);
 }
 
 function storeAccounts(accounts) {
