@@ -30,22 +30,29 @@ function getAccountsFromUI() {
 function fillAccounts(accounts) {
   var accountsHTML = accounts.map(function (account) {
     return '<li class="account" data-name="' + account.name + '">' + account.name +
-      '  <a href="#">Remove</a></li>'
+      ' | <a class="select" href="#">Select</a> | <a class="remove" href="#">Remove</a></li>'
   })
   $('.accounts').html(accountsHTML)
-  $('.accounts a').on('click', removeAccount)
+  $('.accounts a.select').on('click', selectAccount)
+  $('.accounts a.remove').on('click', removeAccount)
+}
+
+function selectAccount(ev) {
+  var accountName = $(this).parent().data('name')
+  console.info('Selecting account: ' + accountName)
+  $('#current-account .name').text(accountName);
 }
 
 function removeAccount(ev) {
   var accountName = $(this).parent().data('name')
   console.warn('Removing account: ' + accountName)
   $(this).parent().remove()
-  
+
   var accounts = getAccountsFromUI();
   accounts = accounts.filter(function(account) {
     return account.name !== accountName
   })
-  
+
   storeAccounts(accounts);
 }
 
