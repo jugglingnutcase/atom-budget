@@ -1,23 +1,22 @@
 var $ = require('jquery');
-var leveljs = require('level-js');
-var db = leveljs('budget');
+var data = require('./lib/data');
 
-function get (attr) {
+var get = function (attr) {
   return function (object) { return object[attr]; }
 }
 
-function addAccount() {
+var addAccount = function () {
   var accounts = getAccountsFromUI();
   var newAccountName = $('#accountName').val();
   var newAccount = { name: newAccountName }
   var accountNames = accounts.map(get('name'));
   if(accountNames.indexOf(newAccountName) == -1) {
     accounts.push(newAccount);
-    storeAccounts(accounts);
+    data.storeAccounts(accounts, fillAccounts);
   }
 }
 
-function getAccountsFromUI() {
+var getAccountsFromUI = function () {
   var accounts = [];
   $('.accounts .account').each(function () {
     accounts.push({ name: $(this).data('name') })
@@ -27,25 +26,31 @@ function getAccountsFromUI() {
 }
 
 // Build up and insert the HTML
-function fillAccounts(accounts) {
-  var accountsHTML = accounts.map(function (account) {
-    return '<li class="account" data-name="' + account.name + '">' +
-      '<a class="select" href="#">' + account.name + '</a>' +
-      ' | <a class="remove" href="#">Remove</a>' +
-      '</li>'
-  })
+var fillAccounts = function(err, accounts) {
+  var accountsHTML;
+  if (err) {
+    accountsHTML = "Error retrieving accounts"
+  } else {
+    accountsHTML = accounts.map(function (account) {
+      return '<li class="account" data-name="' + account.name + '">' +
+        '<a class="select" href="#">' + account.name + '</a>' +
+        ' | <a class="remove" href="#">Remove</a>' +
+        '</li>'
+    }).join("");
+  }
+
   $('.accounts').html(accountsHTML)
   $('.accounts a.select').on('click', selectAccount)
   $('.accounts a.remove').on('click', removeAccount)
 }
 
-function selectAccount(ev) {
+var selectAccount = function(ev) {
   var accountName = $(this).parent().data('name')
   console.info('Selecting account: ' + accountName)
   $('#current-account .name').text(accountName);
-}
+};
 
-function removeAccount(ev) {
+var removeAccount = function(ev) {
   var accountName = $(this).parent().data('name')
   console.warn('Removing account: ' + accountName)
   $(this).parent().remove()
@@ -55,28 +60,13 @@ function removeAccount(ev) {
     return account.name !== accountName
   })
 
-  storeAccounts(accounts);
-}
+  data.storeAccounts(accounts, fillAccounts);
+};
 
-function storeAccounts(accounts) {
-  db.put('accounts', JSON.stringify(accounts), function(err) {
-    if (err) {
-      console.error('Error saving accounts: ' + err);
-      return;
-    }
-
-    fillAccounts(accounts);
-  });
-}
-
-function appReady() {
-  db.get('accounts', function(err, data) {
-    if (err) return;
-    fillAccounts(JSON.parse(data.toString()));
-  });
-
+data.open(function() {
+  // Add an account adder handler
   $('.addAccount').on('click', addAccount);
-}
 
-// Prefill any accounts we know about
-db.open(appReady);
+  // Fill the accounts from the database
+  data.getAccounts(fillAccounts);
+})
