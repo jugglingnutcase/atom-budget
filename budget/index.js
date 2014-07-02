@@ -29,8 +29,10 @@ function getAccountsFromUI() {
 // Build up and insert the HTML
 function fillAccounts(accounts) {
   var accountsHTML = accounts.map(function (account) {
-    return '<li class="account" data-name="' + account.name + '">' + account.name +
-      ' | <a class="select" href="#">Select</a> | <a class="remove" href="#">Remove</a></li>'
+    return '<li class="account" data-name="' + account.name + '">' +
+      '<a class="select" href="#">' + account.name + '</a>' +
+      ' | <a class="remove" href="#">Remove</a>' +
+      '</li>'
   })
   $('.accounts').html(accountsHTML)
   $('.accounts a.select').on('click', selectAccount)
