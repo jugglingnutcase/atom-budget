@@ -10,9 +10,18 @@ var addAccount = function () {
   var newAccountName = $('#accountName').val();
   var newAccount = { name: newAccountName }
   var accountNames = accounts.map(get('name'));
+
+  if(newAccountName === '') {
+    alert("Please provide a name for the account!")
+    return;
+  }
+
   if(accountNames.indexOf(newAccountName) == -1) {
     accounts.push(newAccount);
     data.storeAccounts(accounts, fillAccounts);
+
+    // Set the input box back to emptiness
+    $('#accountName').val('');
   }
 }
 
@@ -64,6 +73,9 @@ var removeAccount = function(ev) {
 data.open(function() {
   // Add an account adder handler
   $('.addAccount').on('click', addAccount);
+  $('#accountName').on('keypress', function(e) {
+    if (e.which == 13) addAccount()
+  });
 
   // Fill the accounts from the database
   data.getAccounts(fillAccounts);
