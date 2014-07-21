@@ -46,13 +46,11 @@ var fillAccounts = function(err, accounts) {
 
 var selectAccount = function(ev) {
   var accountName = $(this).parent().data('name')
-  console.info('Selecting account: ' + accountName)
   $('#current-account .name').text(accountName);
 };
 
 var removeAccount = function(ev) {
   var accountName = $(this).parent().data('name')
-  console.warn('Removing account: ' + accountName)
   $(this).parent().remove()
 
   var accounts = getAccountsFromUI();
