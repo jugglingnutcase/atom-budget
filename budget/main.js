@@ -4,9 +4,6 @@ var Menu = require('menu');
 var MenuItem = require('menu-item');
 var AppMenus = require('./menus');
 
-// Report crashes to our server.
-require('crash-reporter').start();
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
