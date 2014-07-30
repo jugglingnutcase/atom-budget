@@ -7,7 +7,7 @@
   "dependencies": {
     "grunt": "^0.4.5",
     "grunt-download-atom-shell": "^0.8.2",
-    "atom-package-manager": "0.83.0"
+    "atom-package-manager": "0.85.0"
   },
   "repository": {
     "type": "git",
